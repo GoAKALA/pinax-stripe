@@ -2,7 +2,7 @@ import importlib
 
 from django.apps import AppConfig as BaseAppConfig
 from django.utils.translation import ugettext_lazy as _
-
+from django.conf import settings
 
 class AppConfig(BaseAppConfig):
 
@@ -11,4 +11,5 @@ class AppConfig(BaseAppConfig):
     verbose_name = _("Pinax Stripe")
 
     def ready(self):
-        importlib.import_module("pinax.stripe.webhooks")
+        if getattr(settings, "PINAX_STRIPE_ENABLED", True):
+            importlib.import_module("pinax.stripe.webhooks")
